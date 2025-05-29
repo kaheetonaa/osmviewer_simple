@@ -4,7 +4,7 @@ import OSMXML from 'ol/format/OSMXML.js';
 import TileLayer from 'ol/layer/Tile.js';
 import VectorLayer from 'ol/layer/Vector.js';
 import {bbox as bboxStrategy} from 'ol/loadingstrategy.js';
-import {transformExtent} from 'ol/proj.js';
+import HeatmapLayer from 'ol/layer/Heatmap.js';
 import VectorSource from 'ol/source/Vector.js';
 import Fill from 'ol/style/Fill.js';
 import Stroke from 'ol/style/Stroke.js';
@@ -18,11 +18,11 @@ const styles = {
     '.*': new Style({
       zIndex: 100,
       stroke: new Stroke({
-        color: 'rgba(246, 99, 79, 1.0)',
+        color: 'rgba(255, 0, 0, 1.0)',
         width: 1,
       }),
       fill: new Fill({
-        color: 'rgba(246, 99, 79, 0.3)',
+        color: 'rgba(255, 0, 0, 0.3)',
       }),
     }),
   }
@@ -41,10 +41,18 @@ const vectorSource = new VectorSource({
       success(features);
     });
     client.addEventListener('error', failure);
-    const query = 'way ["building"] (-12.84307,15.576751,-12.683729,15.768045) (newer:"2025-05-29T07:00:00Z") (user:"Quang Huy NGUYEN"); out geom; way ["building"] (-12.84307,15.576751,-12.683729,15.768045) (newer:"2025-05-29T07:00:00Z") (user:"leopardo_silenzioso0"); out geom; way ["building"] (-12.84307,15.576751,-12.683729,15.768045) (newer:"2025-05-29T07:00:00Z") (user:"leopardo_silenzioso1"); out geom; way ["building"] (-12.84307,15.576751,-12.683729,15.768045) (newer:"2025-05-29T07:00:00Z") (user:"leopardo_silenzioso2"); out geom; way ["building"] (-12.84307,15.576751,-12.683729,15.768045) (newer:"2025-05-29T07:00:00Z") (user:"leopardo_silenzioso3"); out geom; way ["building"] (-12.84307,15.576751,-12.683729,15.768045) (newer:"2025-05-29T07:00:00Z") (user:"leopardo_silenzioso4"); out geom; way ["building"] (-12.84307,15.576751,-12.683729,15.768045) (newer:"2025-05-29T07:00:00Z") (user:"leopardo_silenzioso5"); out geom; way ["building"] (-12.84307,15.576751,-12.683729,15.768045) (newer:"2025-05-29T07:00:00Z") (user:"leopardo_silenzioso6"); out geom; way ["building"] (-12.84307,15.576751,-12.683729,15.768045) (newer:"2025-05-29T07:00:00Z") (user:"leopardo_silenzioso7"); out geom; way ["building"] (-12.84307,15.576751,-12.683729,15.768045) (newer:"2025-05-29T07:00:00Z") (user:"leopardo_silenzioso8"); out geom; way ["building"] (-12.84307,15.576751,-12.683729,15.768045) (newer:"2025-05-29T07:00:00Z") (user:"leopardo_silenzioso9"); out geom; way ["building"] (-12.84307,15.576751,-12.683729,15.768045) (newer:"2025-05-29T07:00:00Z") (user:"leopardo_silenzioso10"); out geom; way ["building"] (-12.84307,15.576751,-12.683729,15.768045) (newer:"2025-05-29T07:00:00Z") (user:"leopardo_silenzioso11"); out geom; way ["building"] (-12.84307,15.576751,-12.683729,15.768045) (newer:"2025-05-29T07:00:00Z") (user:"leopardo_silenzioso12"); out geom; way ["building"] (-12.84307,15.576751,-12.683729,15.768045) (newer:"2025-05-29T07:00:00Z") (user:"leopardo_silenzioso13"); out geom; way ["building"] (-12.84307,15.576751,-12.683729,15.768045) (newer:"2025-05-29T07:00:00Z") (user:"leopardo_silenzioso14"); out geom; way ["building"] (-12.84307,15.576751,-12.683729,15.768045) (newer:"2025-05-29T07:00:00Z") (user:"leopardo_silenzioso15"); out geom; way ["building"] (-12.84307,15.576751,-12.683729,15.768045) (newer:"2025-05-29T07:00:00Z") (user:"leopardo_silenzioso16"); out geom; way ["building"] (-12.84307,15.576751,-12.683729,15.768045) (newer:"2025-05-29T07:00:00Z") (user:"leopardo_silenzioso18"); out geom; way ["building"] (-12.84307,15.576751,-12.683729,15.768045) (newer:"2025-05-29T07:00:00Z") (user:"leopardo_silenzioso19"); out geom; way ["building"] (-12.84307,15.576751,-12.683729,15.768045) (newer:"2025-05-29T07:00:00Z") (user:"leopardo_silenzioso20"); out geom; way ["building"] (-12.84307,15.576751,-12.683729,15.768045) (newer:"2025-05-29T07:00:00Z") (user:"leopardo_silenzioso21"); out geom; way ["building"] (-12.84307,15.576751,-12.683729,15.768045) (newer:"2025-05-29T07:00:00Z") (user:"leopardo_silenzioso22"); out geom; way ["building"] (-12.84307,15.576751,-12.683729,15.768045) (newer:"2025-05-29T07:00:00Z") (user:"leopardo_silenzioso23"); out geom;';
+    const query = 'way ["building"] (-12.84307,15.576751,-12.683729,15.768045) (newer:"2025-05-29T07:00:00Z"); out geom; ';
     client.send(query);
   },
   strategy: bboxStrategy,
+});//(user:"Quang Huy NGUYEN")
+
+const heatmap = new HeatmapLayer({
+  source: vectorSource,
+  blur: 50,
+  radius: 20,
+  gradient:['rgba(255, 0, 0','rgba(255, 0, 0'],
+  opacity:.3
 });
 
 const vector = new VectorLayer({
@@ -69,7 +77,7 @@ const basemap = new TileLayer({
 })
 
 map = new Map({
-  layers: [basemap,vector],
+  layers: [basemap,heatmap,vector],
   target: document.getElementById('map'),
   view: new View({
     projection: 'EPSG:4326',
