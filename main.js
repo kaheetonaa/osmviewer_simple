@@ -74,6 +74,7 @@ const vector = new VectorLayer({
 
 const basemap = new TileLayer({
   source: new OSM(),
+  opacity:0.7,
 })
 
 map = new Map({
