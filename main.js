@@ -41,7 +41,7 @@ const vectorSource = new VectorSource({
       success(features);
     });
     client.addEventListener('error', failure);
-    const query = 'way ["building"] (-12.84307,15.576751,-12.683729,15.768045) (newer:"2025-05-29T07:00:00Z"); out geom; ';
+    const query = 'way ["building"] (-12.84307,15.576751,-12.683729,15.768045) (newer:"2025-05-30T07:00:00Z"); out geom; ';
     client.send(query);
   },
   strategy: bboxStrategy,
